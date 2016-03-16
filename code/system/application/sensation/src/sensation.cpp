@@ -119,8 +119,8 @@ odcore::data::dmcp::ModuleExitCodeMessage::ModuleExitCode Sensation::body() {
                   << "% ground truth: x (m),  y (m), theta (rad), theta_dot(rad/s), commands : velocity (m/s) steering angle (rad), noisy data: x (m), y (m), theta (rad), theta_dot (rad/s), ekf estimation vector: x (m), x_dot (m/s), y (m), y_dot (ms), theta (rad), theta_dot(rad/s)  " << endl;
     std::ofstream foutdyn("../Exp_data/dyn_output.csv");
     std::ofstream foutdyn_ekfState("../Exp_data/dyn_output_ekf.csv");
-    fout_ekfState << "% HEADER: Output of the Extended Kalman Filter, data format : \n"
-                  << "% ground truth: x (m),  y (m), theta (rad), theta_dot(rad/s), commands : velocity (m/s) steering angle (rad), noisy data: x (m), y (m), theta (rad), theta_dot (rad/s), ekf estimation vector: x (m), x_dot (m/s), y (m), y_dot (ms), theta (rad), theta_dot(rad/s)  " << endl;
+    foutdyn_ekfState << "% HEADER: Output of the Extended Kalman Filter, data format : \n" //TODO write right
+                  << "% ground truth: x (m),  y (m), uy (m/s), uy_dot (m/s^2), theta (rad), r (rad/s), r_dot (rad/s^2) commands : velocity (m/s) steering angle (rad), noisy data: x (m), y (m), theta (rad), theta_dot (rad/s), ekf estimation vector: x (m), x_dot (m/s), y (m), y_dot (ms), theta (rad), theta_dot(rad/s)  " << endl;
 
     // You can optionally dump a header (i.e. first line with information).
     const bool WITH_HEADER = true;
@@ -128,6 +128,7 @@ odcore::data::dmcp::ModuleExitCodeMessage::ModuleExitCode Sensation::body() {
     const char DELIMITER = ',';
     // For every data structure that you want to export in a CSV file, you need to create a new CSVFromVisitableVisitor.
     odcore::reflection::CSVFromVisitableVisitor csvExporter1(fout, WITH_HEADER, DELIMITER);
+    odcore::reflection::CSVFromVisitableVisitor csvExporter2(foutdyn, WITH_HEADER, DELIMITER);
 
 
 
@@ -156,6 +157,7 @@ odcore::data::dmcp::ModuleExitCodeMessage::ModuleExitCode Sensation::body() {
         // The csvExporter1 will "visit" the data structure "commands" and iterate
         // through its fields that will be stored in the output file fout.
         commands.accept(csvExporter1);
+        commands.accept(csvExporter2);
 
          // set the commands from the opendavinci to the ekf state space
          // cout << getName() << " << message >> \n   CONTROL SIGNALS : u.v = " << U.v() << "  u.phi  = " << U.phi() << endl;
@@ -165,7 +167,7 @@ odcore::data::dmcp::ModuleExitCodeMessage::ModuleExitCode Sensation::body() {
          Udyn.phi() = commands.getSteeringAngle();
          // System measurements
          m_tkmObservationVector Z = observationModel.h(X);
-         m_tdmObservationVector Zdyn = dynObservationModel.h(X);
+         m_tdmObservationVector Zdyn = dynObservationModel.h(Xdyn);
 
          // set the commands from the opendavinci to the ekf state space
          Z.Z_x()         =   _p2.getX();//truckLocation.getX();
@@ -224,7 +226,7 @@ m_saveToFile = true;
             foutdyn_ekfState << truckLocation.getX() << " " << truckLocation.getY() << " " << truckLocation.getYaw() << " " << truckLocation.getYawRate() << " "
                           << Udyn.v() << " " << Udyn.phi() << " "
                           << Zdyn.Z_x() << " " << Zdyn.Z_y() << " " << Zdyn.Z_theta() << " " << Zdyn.Z_theta_dot() << " "
-                          << Xdyn.x() << " " << Xdyn.x_dot() << " "  << Xdyn.y() << " " << Xdyn.y_dot() << " " << Xdyn.theta() << " " << Xdyn.theta_dot() << " "
+                          << Xdyn.x() << " " << " "  << Xdyn.y() << " " << Xdyn.uy() << Xdyn.uy_dot() << " " << Xdyn.theta() << " " << Xdyn.r() << Xdyn.r_dot() << " "
                           << endl;
             }
 

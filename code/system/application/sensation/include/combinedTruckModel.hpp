@@ -16,8 +16,8 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#ifndef LATERALTRUCKMODEL_HPP_
-#define LATERALTRUCKMODEL_HPP_
+#ifndef COMBINEDTRUCKMODEL_HPP_
+#define COMBINEDTRUCKMODEL_HPP_
 
 #include <math.h>
 #include "LinearizedSystemModel.hpp"

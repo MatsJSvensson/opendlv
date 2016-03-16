@@ -45,7 +45,6 @@ class Act : public odcore::base::module::TimeTriggeredConferenceClientModule {
   void tearDown();
 };
 
-};
 } // act
 } // action
 } // opendlv

@@ -113,7 +113,7 @@ class Sensation : public odcore::base::module::TimeTriggeredConferenceClientModu
     typedef opendlv::system::application::sensation::truckObservationModel::truckObservationModel<double> m_tkmObservationModel;
     typedef opendlv::system::application::sensation::truckObservationModel::truckObservationVector<double> m_tkmObservationVector;
 
-    // define some shourtcut to be used in the file --- tkm = Truck dynamic Model
+    // define some shourtcut to be used in the file --- tdm = Truck dynamic Model
     typedef opendlv::system::application::sensation::combinedTruckModel::State<double> m_tdmState;     ///--> def truck dynamic model state space
     typedef opendlv::system::application::sensation::combinedTruckModel::Control<double> m_tdmControl; ///--> def truck dynamic model control space
     typedef opendlv::system::application::sensation::combinedTruckModel::SystemModel<double> m_tdmSys; ///--> def truck dynamic model system
