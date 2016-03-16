@@ -87,7 +87,7 @@ void Sensation::tearDown()
 
 odcore::data::dmcp::ModuleExitCodeMessage::ModuleExitCode Sensation::body() {
     // Example on how to use the type WGS84Coordinate:
-    //{
+
         using namespace opendlv::data::environment;
 
         // First, you need to declare a lat/lon coordinate to be used
@@ -98,6 +98,7 @@ odcore::data::dmcp::ModuleExitCodeMessage::ModuleExitCode Sensation::body() {
 
         // Let's assume you have another lat/lon coordinate at hand.
         WGS84Coordinate WGS84_p2(57.71278000, WGS84Coordinate::NORTH, 11.94581583, WGS84Coordinate::EAST);
+
 
         // Now, you can transform this new lat/lon coordinate to the
         // previously specified Cartesian reference frame.
@@ -110,7 +111,7 @@ odcore::data::dmcp::ModuleExitCodeMessage::ModuleExitCode Sensation::body() {
         double p2_x = cartesian_p2.getX();
         double p2_y = cartesian_p2.getY();
         std::cout << "X = " << p2_x << ", Y = " << p2_y << std::endl;
-    //}
+
 
     // To dump data structures into a CSV file, you create an output file first.
     std::ofstream fout("../Exp_data/output.csv");
