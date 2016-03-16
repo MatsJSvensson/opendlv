@@ -1,5 +1,5 @@
 Here we have some dataset to test the VSE (Vehicle State Estimator). 
-The dataset is coposed of two files:
+The dataset is composed of two files:
 
 Z_k_VSE_TEST
 U_K_VSE_TEST
