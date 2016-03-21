@@ -206,22 +206,16 @@ run_vse_test = false;
              // Predict state for current time-step using the filters
              X = m_ekf.predict(sys, U);  // TODO: change auto type for compatibility !
              Xdyn = m_dyn_ekf.predict(sys_dyn, Udyn);  // TODO: change auto type for compatibility !
-
-             std::cout << Xdyn.x() << " " << Xdyn.y() << std::endl;
-
+             
              // update stage of the EKF
              X = m_ekf.update(observationModel, Z);
              Xdyn = m_dyn_ekf.update(dynObservationModel, Zdyn);
-
-             std::cout << Xdyn.x() << " " << Xdyn.y() << std::endl;
 
             // Print to stdout as csv format
             std::cout   << getName() << " << message >> STATE \n"
                         << "timestamp = " << time_stamp << "\n"
                         << "           x " << X.x() << ", y " << X.y() << ", theta " << X.theta()  << "\n"
                         << "           x_dyn " << Xdyn.x() << ", y_dyn " << Xdyn.y() << ", theta_dyn " << Xdyn.theta()  << "\n"
-                        << Zdyn.Z_x() << " " << Zdyn.Z_y() << " " << Zdyn.Z_theta() << " " << Zdyn.Z_theta_dot() << " " << "\n"
-                        << Udyn.v() << " " << Udyn.phi() << "\n" 
                         << std::endl;
 time_stamp +=0.05;
             //save data to file
