@@ -191,13 +191,16 @@ public:
         double c6 = 1;
         //double ux = sqrt(pow(u.v(),2)-pow(x.uy(),2));
 
+        double v = u.v();
+        if(u.v() < 0.0001) { v = 0.0001; }
+
         x_p.x() = x.x() + std::cos(x.theta())*u.v()*delta_t - std::sin(x.theta())*x.uy()*delta_t;
         x_p.y() = x.y() + std::sin(x.theta())*u.v()*delta_t + std::cos(x.theta())*x.uy()*delta_t;
         x_p.uy() = x.uy() + delta_t * x.uy_dot();
-        x_p.uy_dot() = c1 * x.uy()/u.v() - (u.v() + c2/u.v()) * x.r() + c3 * u.phi();
+        x_p.uy_dot() = c1 * x.uy()/v - (u.v() + c2/v) * x.r() + c3 * u.phi();
         x_p.theta() = x.theta() + x.r()*delta_t;
         x_p.r() = x.r() + delta_t * x.r_dot();
-        x_p.uy_dot() = c4 * x.uy()/u.v() + c5 * x.r()/u.v() + c6 * u.phi();
+        x_p.uy_dot() = c4 * x.uy()/v + c5 * x.r()/v + c6 * u.phi();
 
         // Return transitioned state vector
         return x_p;
@@ -251,6 +254,9 @@ protected:
         //double c6 = 1;
         //double ux = sqrt(pow(u.v(),2)-pow(x.uy(),2));
 
+        double v = u.v();
+        if(u.v() < 0.0001) { v = 0.0001; }
+
         // partial derivative of x.x() w.r.t. x.x()
         this->F( S::X, S::X ) = 1;
         // partial derivative of x.x() w.r.t. x.uy()
@@ -271,9 +277,9 @@ protected:
         this->F( S::UY, S::UY_DOT ) = delta_t;
 
         // partial derivative of x.uy_dot() w.r.t. x.uy()
-        this->F( S::UY_DOT, S::UY ) = c1/u.v();
+        this->F( S::UY_DOT, S::UY ) = c1/v;
         // partial derivative of x.uy_dot() w.r.t. x.uy()
-        this->F( S::UY_DOT, S::R ) = u.v() + c2/u.v();
+        this->F( S::UY_DOT, S::R ) = u.v() + c2/v;
 
         // partial derivative of x.theta() w.r.t. x.theta()
         this->F( S::THETA, S::THETA ) = 1;
@@ -286,9 +292,9 @@ protected:
         this->F( S::R, S::R_DOT ) = delta_t;
 
         // partial derivative of x.r_dot() w.r.t. x.uy()
-        this->F( S::R_DOT, S::UY ) = c4/u.v();
+        this->F( S::R_DOT, S::UY ) = c4/v;
         // partial derivative of x.r_dot() w.r.t. x.r()
-        this->F( S::R_DOT, S::R ) = c5/u.v();
+        this->F( S::R_DOT, S::R ) = c5/v;
 
         // W = df/dw (Jacobian of state transition w.r.t. the noise)
         this->W.setIdentity();
