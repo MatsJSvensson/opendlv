@@ -117,11 +117,11 @@ odcore::data::dmcp::ModuleExitCodeMessage::ModuleExitCode Sensation::body() {
     std::ofstream fout("../Exp_data/output.csv");
     std::ofstream fout_ekfState("../Exp_data/output_ekf.csv");
     fout_ekfState << "% HEADER: Output of the Extended Kalman Filter, data format : \n"
-                  << "% ground truth: x (m),  y (m), theta (rad), theta_dot(rad/s), commands : velocity (m/s) steering angle (rad), noisy data: x (m), y (m), theta (rad), theta_dot (rad/s), ekf estimation vector: x (m), x_dot (m/s), y (m), y_dot (ms), theta (rad), theta_dot(rad/s)  " << endl;
+                  << "% ground truth: x (m),  y (m), theta (rad), theta_dot(rad/s), commands : velocity (m/s) steering angle (rad), noisy data: x (m), y (m), theta (rad), theta_dot (rad/s), ekf estimation vector: x (m), x_dot (m/s), y (m), y_dot (ms), theta (rad), theta_dot(rad/s)  \n" << std::endl;
     std::ofstream foutdyn("../Exp_data/dyn_output.csv");
     std::ofstream foutdyn_ekfState("../Exp_data/dyn_output_ekf.csv");
-    foutdyn_ekfState << "% HEADER: Output of the Extended Kalman Filter, data format : \n" //TODO write right
-                  << "% ground truth: x (m),  y (m), uy (m/s), uy_dot (m/s^2), theta (rad), r (rad/s), r_dot (rad/s^2) commands : velocity (m/s) steering angle (rad), noisy data: x (m), y (m), theta (rad), theta_dot (rad/s), ekf estimation vector: x (m), x_dot (m/s), y (m), y_dot (ms), theta (rad), theta_dot(rad/s)  " << endl;
+    foutdyn_ekfState << "%HEADER: Output of the Extended Kalman Filter, data format : \n" //TODO write right
+                  << "%ground_truth:x(m),  y(m), theta(rad), r(rad/s), commands:velocity(m/s) steering_angle(rad), noisy_data:x(m), y(m), theta(rad), theta_dot(rad/s), ekf_estimation_vector:x(m), x_dot(m/s), y(m), y_dot(ms), theta(rad), theta_dot(rad/s)  \n" << std::endl;
 
     // You can optionally dump a header (i.e. first line with information).
     const bool WITH_HEADER = true;
@@ -206,7 +206,7 @@ run_vse_test = false;
              // Predict state for current time-step using the filters
              X = m_ekf.predict(sys, U);  // TODO: change auto type for compatibility !
              Xdyn = m_dyn_ekf.predict(sys_dyn, Udyn);  // TODO: change auto type for compatibility !
-             
+
              // update stage of the EKF
              X = m_ekf.update(observationModel, Z);
              Xdyn = m_dyn_ekf.update(dynObservationModel, Zdyn);
@@ -227,12 +227,13 @@ m_saveToFile = true;
                           << X.x() << " " << X.x_dot() << " "  << X.y() << " " << X.y_dot() << " " << X.theta() << " " << X.theta_dot() << " "
                           << endl;
 
-            foutdyn_ekfState << truckLocation.getX() << " " << truckLocation.getY() << " " << truckLocation.getYaw() << " " << truckLocation.getYawRate() << " "
+            foutdyn_ekfState << _p2.getX() << " " << _p2.getY() << " " << truckLocation.getYaw() << " " << truckLocation.getYawRate() << " "
                           << Udyn.v() << " " << Udyn.phi() << " "
                           << Zdyn.Z_x() << " " << Zdyn.Z_y() << " " << Zdyn.Z_theta() << " " << Zdyn.Z_theta_dot() << " "
                           << Xdyn.x() << " " << " "  << Xdyn.y() << " " << Xdyn.uy() << Xdyn.uy_dot() << " " << Xdyn.theta() << " " << Xdyn.r() << Xdyn.r_dot() << " "
                           << endl;
             }
+
 
          }
          else

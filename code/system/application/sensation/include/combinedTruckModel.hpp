@@ -54,6 +54,7 @@ public:
 
     //! Position Y
     static constexpr size_t Y = 1;
+
     //! Lateral velocity
     static constexpr size_t UY = 2;
     //! Lateral acceleration
@@ -160,12 +161,12 @@ public:
      * And where c1-c6 = constants depending on tire cornering stiffness, moment of inertia, mass and
      * wheelbase distances
      *
-     * c1 = (-s1 -s2) /m                s1 = cornering stiffness of front wheel
+     * c1 = (-s1 -s2) /m                s1 = cornering stiffness of front wheel          s += 0.15
      * c2 = (s2*b -s1*a)/m              s2 = cornering stiffness of rear wheel
-     * c3 = s1/m                        m = mass of truck
-     * c4 = (s2*b -s1*a)/I              a = distance from front wheel to center of mass
+     * c3 = s1/m                        m = mass of truck                                m += 2000
+     * c4 = (s2*b -s1*a)/I              a = distance from front wheel to center of mass  a + b = 3.8
      * c5 = (-s1*a² - s2*b²)/I          b = distance from rear wheel to center of mass
-     * c6 = s1*a/I                      I = moment of inertia of truck
+     * c6 = s1*a/I                      I = moment of inertia of truck                   I += 4000
      *
      *
      * @param [in] x The system state in current time-step
@@ -183,12 +184,20 @@ public:
 
         // TODO: Find constants and set them somewhere else
         double delta_t = 0.05;
-        double c1 = 1;
-        double c2 = 1;
-        double c3 = 1;
-        double c4 = 1;
-        double c5 = 1;
-        double c6 = 1;
+
+        double s1 = 0.15;
+        double s2 = 0.15;
+        double m = 2000;
+        double a = 1;
+        double b = 2.8;
+        double I = 4000;
+
+        double c1 = (-s1 -s2) /m ;
+        double c2 = (s2*b -s1*a)/m ;
+        double c3 = s1/m ;
+        double c4 = (s2*b -s1*a)/I ;
+        double c5 = (-s1*pow(a,2) - s2*pow(b,2))/I;
+        double c6 = s1*a/I ;
         //double ux = sqrt(pow(u.v(),2)-pow(x.uy(),2));
 
         double v = u.v();
@@ -246,13 +255,19 @@ protected:
 
         //TODO fix constants
         double delta_t = 0.05;
-        double c1 = 1;
-        double c2 = 1;
-        //double c3 = 1;
-        double c4 = 1;
-        double c5 = 1;
-        //double c6 = 1;
-        //double ux = sqrt(pow(u.v(),2)-pow(x.uy(),2));
+        double s1 = 0.15;
+        double s2 = 0.15;
+        double m = 2000;
+        double a = 1;
+        double b = 2.8;
+        double I = 4000;
+
+        double c1 = (-s1 -s2) /m ;
+        double c2 = (s2*b -s1*a)/m ;
+
+        double c4 = (s2*b -s1*a)/I ;
+        double c5 = (-s1*pow(a,2) - s2*pow(b,2))/I;
+
 
         double v = u.v();
         if(u.v() < 0.0001) { v = 0.0001; }
